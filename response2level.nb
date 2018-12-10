@@ -1,0 +1,503 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 8.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       157,          7]
+NotebookDataLength[     16474,        493]
+NotebookOptionsPosition[     15353,        455]
+NotebookOutlinePosition[     15929,        477]
+CellTagsIndexPosition[     15886,        474]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+Cell["\<\
+Concepts and Methods of 2D Infrared Spectroscopy
+Peter Hamm and Martin T.Zanni\
+\>", "Section"],
+
+Cell[CellGroupData[{
+
+Cell["This progam was used to produce Figs. 7.6 and 7.7", "Subsubtitle"],
+
+Cell["\<\
+Define response functions for rephasing and non-rephasing diagrams for a \
+two-level system (Equ. 7.36)\
+\>", "Text"],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"Rnr", "=", 
+   RowBox[{
+    RowBox[{"Exp", "[", 
+     RowBox[{
+      RowBox[{"-", "I"}], 
+      RowBox[{"(", 
+       RowBox[{"t3", "+", "t1"}], ")"}], "w"}], "]"}], 
+    RowBox[{"Exp", "[", 
+     RowBox[{
+      RowBox[{"-", 
+       RowBox[{"g", "[", "t1", "]"}]}], "-", 
+      RowBox[{"g", "[", "t2", "]"}], "-", 
+      RowBox[{"g", "[", "t3", "]"}], "+", 
+      RowBox[{"g", "[", 
+       RowBox[{"t1", "+", "t2"}], "]"}], "+", 
+      RowBox[{"g", "[", 
+       RowBox[{"t2", "+", "t3"}], "]"}], "-", 
+      RowBox[{"g", "[", 
+       RowBox[{"t1", "+", "t2", "+", "t3"}], "]"}]}], "]"}]}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"Rr", "=", 
+   RowBox[{
+    RowBox[{"Exp", "[", 
+     RowBox[{
+      RowBox[{"-", "I"}], 
+      RowBox[{"(", 
+       RowBox[{"t3", "-", "t1"}], ")"}], "w"}], "]"}], 
+    RowBox[{"Exp", "[", 
+     RowBox[{
+      RowBox[{"-", 
+       RowBox[{"g", "[", "t1", "]"}]}], "+", 
+      RowBox[{"g", "[", "t2", "]"}], "-", 
+      RowBox[{"g", "[", "t3", "]"}], "-", 
+      RowBox[{"g", "[", 
+       RowBox[{"t1", "+", "t2"}], "]"}], "-", 
+      RowBox[{"g", "[", 
+       RowBox[{"t2", "+", "t3"}], "]"}], "+", 
+      RowBox[{"g", "[", 
+       RowBox[{"t1", "+", "t2", "+", "t3"}], "]"}]}], "]"}]}]}], 
+  ";"}]}], "Input"],
+
+Cell["Define Kubo-lineshape-function (Eq. 7.25) ", "Text"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"g", "[", "t_", "]"}], "=", 
+   RowBox[{
+    SuperscriptBox["\[CapitalDelta]w", "2"], 
+    SuperscriptBox[
+     SubscriptBox["\[Tau]", "c"], "2"], 
+    RowBox[{"(", 
+     RowBox[{
+      RowBox[{"Exp", "[", 
+       RowBox[{
+        RowBox[{"-", "t"}], "/", 
+        SubscriptBox["\[Tau]", "c"]}], "]"}], "+", 
+      RowBox[{"t", "/", 
+       SubscriptBox["\[Tau]", "c"]}], "-", "1"}], ")"}]}]}], ";"}]], "Input"],
+
+Cell["\<\
+Parameters are in units of ps and ps-1; we set the center frequency to w=0, \
+which is equivalent to a measurement in the rotating frame\
+\>", "Text"],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"\[CapitalDelta]w", "=", "5"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   SubscriptBox["\[Tau]", "c"], "=", "1"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"w", "=", "0"}], ";"}]}], "Input"],
+
+Cell["\<\
+Collect rephasing and non-rephasing  data on a grid with stepsize dt and nt \
+data points with population time t2. The first time-point needs to be halved \
+(Sect. 9.5.3).\
+\>", "Text"],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"t2", "=", ".1"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"nt", "=", "64"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"dt", "=", ".1"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"Rnrlist", "=", 
+   RowBox[{"Table", "[", 
+    RowBox[{"Rnr", ",", 
+     RowBox[{"{", 
+      RowBox[{"t1", ",", "0", ",", 
+       RowBox[{
+        RowBox[{"(", 
+         RowBox[{"nt", "-", "1"}], ")"}], "*", "dt"}], ",", "dt"}], "}"}], 
+     ",", 
+     RowBox[{"{", 
+      RowBox[{"t3", ",", "0", ",", 
+       RowBox[{
+        RowBox[{"(", 
+         RowBox[{"nt", "-", "1"}], ")"}], "*", "dt"}], ",", "dt"}], "}"}]}], 
+    "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"Rrlist", "=", 
+   RowBox[{"Table", "[", 
+    RowBox[{"Rr", ",", 
+     RowBox[{"{", 
+      RowBox[{"t1", ",", "0", ",", 
+       RowBox[{
+        RowBox[{"(", 
+         RowBox[{"nt", "-", "1"}], ")"}], "*", "dt"}], ",", "dt"}], "}"}], 
+     ",", 
+     RowBox[{"{", 
+      RowBox[{"t3", ",", "0", ",", 
+       RowBox[{
+        RowBox[{"(", 
+         RowBox[{"nt", "-", "1"}], ")"}], "*", "dt"}], ",", "dt"}], "}"}]}], 
+    "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"For", "[", 
+   RowBox[{
+    RowBox[{"i", "=", "1"}], ",", 
+    RowBox[{"i", "\[LessEqual]", "nt"}], ",", 
+    RowBox[{"i", "++"}], ",", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"Rnrlist", "[", 
+       RowBox[{"[", 
+        RowBox[{"i", ",", "1"}], "]"}], "]"}], "/=", "2"}], ";", 
+     RowBox[{
+      RowBox[{"Rrlist", "[", 
+       RowBox[{"[", 
+        RowBox[{"i", ",", "1"}], "]"}], "]"}], "/=", "2"}]}]}], "]"}], 
+  ";"}], "\n", 
+ RowBox[{
+  RowBox[{"For", "[", 
+   RowBox[{
+    RowBox[{"i", "=", "2"}], ",", 
+    RowBox[{"i", "\[LessEqual]", "nt"}], ",", 
+    RowBox[{"i", "++"}], ",", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"Rnrlist", "[", 
+       RowBox[{"[", 
+        RowBox[{"1", ",", "i"}], "]"}], "]"}], "/=", "2"}], ";", 
+     RowBox[{
+      RowBox[{"Rrlist", "[", 
+       RowBox[{"[", 
+        RowBox[{"1", ",", "i"}], "]"}], "]"}], "/=", "2"}]}]}], "]"}], 
+  ";"}]}], "Input"],
+
+Cell["Plot time-domain data", "Text"],
+
+Cell[BoxData[
+ RowBox[
+  RowBox[{"ListContourPlot", "[", 
+    RowBox[{
+      RowBox[{"Re", "[", "Rrlist", "]"}], ",", 
+      RowBox[{"PlotRange", "\[Rule]", "All"}], ",", 
+      RowBox[{"Contours", "\[Rule]", "10"}], ",", 
+      RowBox[{"ContourShading", "\[Rule]", "False"}], ",", 
+      RowBox[{"FrameTicks", "\[Rule]", "None"}], ",", 
+      RowBox[{"FrameLabel", "\[Rule]", 
+        RowBox[{"{", 
+          RowBox[{"t3", ",", "t1"}], "}"}]}]}], "]"}], "\[IndentingNewLine]", 
+  RowBox[{"ListContourPlot", "[", 
+    RowBox[{
+      RowBox[{"Re", "[", "Rnrlist", "]"}], ",", 
+      RowBox[{"PlotRange", "\[Rule]", "All"}], ",", 
+      RowBox[{"Contours", "\[Rule]", "10"}], ",", 
+      RowBox[{"ContourShading", "\[Rule]", "False"}], ",", 
+      RowBox[{"FrameTicks", "\[Rule]", "None"}], ",", 
+      RowBox[{"FrameLabel", "\[Rule]", 
+        RowBox[{"{", 
+          RowBox[{"t3", ",", "t1"}], "}"}]}]}], "]"}]]], "Input"],
+
+Cell["\<\
+Perform 2D Fourier transform and re-order data so that w1=w3=0 is centerd in \
+the middle. Frequency axis w1 is inverted.\
+\>", "Text"],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"spectrum2Dr", "=", 
+   RowBox[{"Fourier", "[", "Rrlist", "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"spectrum2Dr", "=", 
+    RowBox[{"Reverse", "[", 
+     RowBox[{"Drop", "[", 
+      RowBox[{
+       RowBox[{"RotateRight", "[", 
+        RowBox[{"spectrum2Dr", ",", 
+         RowBox[{"{", 
+          RowBox[{
+           RowBox[{"nt", "/", "2"}], ",", 
+           RowBox[{"nt", "/", "2"}]}], "}"}]}], "]"}], ",", "1", ",", "1"}], 
+      "]"}], "]"}]}], ";"}], "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"spectrum2Dnr", "=", 
+   RowBox[{"Fourier", "[", "Rnrlist", "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"spectrum2Dnr", "=", 
+    RowBox[{"Drop", "[", 
+     RowBox[{
+      RowBox[{"RotateRight", "[", 
+       RowBox[{"spectrum2Dnr", ",", 
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{"nt", "/", "2"}], ",", 
+          RowBox[{"nt", "/", "2"}]}], "}"}]}], "]"}], ",", "1", ",", "1"}], 
+     "]"}]}], ";"}], "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"spectrum2Dabs", "=", 
+   RowBox[{"Re", "[", 
+    RowBox[{"spectrum2Dr", "+", "spectrum2Dnr"}], "]"}]}], ";"}]}], "Input"],
+
+Cell[BoxData[
+ RowBox[
+  RowBox[{
+    RowBox[{"max", "=", 
+      RowBox[{"Max", "[", 
+        RowBox[{
+          RowBox[{"Max", "[", 
+            RowBox[{"Re", "[", "spectrum2Dr", "]"}], "]"}], ",", 
+          RowBox[{"-", 
+            RowBox[{"Min", "[", 
+              RowBox[{"Re", "[", "spectrum2Dr", "]"}], "]"}]}]}], "]"}]}], 
+    ";"}], "\[IndentingNewLine]", 
+  RowBox[{
+    RowBox[{"p1", "=", 
+      RowBox[{"ListContourPlot", "[", 
+        RowBox[{
+          RowBox[{"Re", "[", "spectrum2Dr", "]"}], ",", 
+          RowBox[{"PlotRange", "\[Rule]", 
+            RowBox[{"{", 
+              RowBox[{"0", ",", "max"}], "}"}]}], ",", 
+          RowBox[{"ContourShading", "\[Rule]", "False"}], ",", 
+          RowBox[{"Contours", "\[Rule]", "10"}], ",", 
+          RowBox[{"Ticks", "\[Rule]", "None"}], ",", 
+          RowBox[{"ContourStyle", "\[Rule]", 
+            RowBox[{"{", 
+              RowBox[{"RGBColor", "[", 
+                RowBox[{"0", ",", "0", ",", "1"}], "]"}], "}"}]}], ",", 
+          RowBox[{"DisplayFunction", "\[Rule]", "Identity"}]}], "]"}]}], 
+    ";"}], "\[IndentingNewLine]", 
+  RowBox[{
+    RowBox[{"p2", "=", 
+      RowBox[{"ListContourPlot", "[", 
+        RowBox[{
+          RowBox[{"Re", "[", "spectrum2Dr", "]"}], ",", 
+          RowBox[{"PlotRange", "\[Rule]", 
+            RowBox[{"{", 
+              RowBox[{
+                RowBox[{"-", "max"}], ",", "0"}], "}"}]}], ",", 
+          RowBox[{"ContourShading", "\[Rule]", "False"}], ",", 
+          RowBox[{"Contours", "\[Rule]", "10"}], ",", 
+          RowBox[{"Ticks", "\[Rule]", "None"}], ",", 
+          RowBox[{"ContourStyle", "\[Rule]", 
+            RowBox[{"{", 
+              RowBox[{"RGBColor", "[", 
+                RowBox[{"1", ",", "0", ",", "0"}], "]"}], "}"}]}], ",", 
+          RowBox[{"DisplayFunction", "\[Rule]", "Identity"}]}], "]"}]}], 
+    ";"}], "\[IndentingNewLine]", 
+  RowBox[{"Show", "[", 
+    RowBox[{
+      RowBox[{"{", 
+        RowBox[{"p1", ",", "p2"}], "}"}], ",", 
+      RowBox[{"PlotRange", "\[Rule]", 
+        RowBox[{"{", 
+          RowBox[{
+            RowBox[{"{", 
+              RowBox[{"1", ",", 
+                RowBox[{"nt", "-", "1"}]}], "}"}], ",", 
+            RowBox[{"{", 
+              RowBox[{"1", ",", 
+                RowBox[{"nt", "-", "1"}]}], "}"}]}], "}"}]}], ",", 
+      RowBox[{"FrameTicks", "\[Rule]", 
+        RowBox[{"{", 
+          RowBox[{"None", ",", "None"}], "}"}]}], ",", 
+      RowBox[{"DisplayFunction", "\[Rule]", "$DisplayFunction"}]}], 
+    "]"}]]], "Input"],
+
+Cell[BoxData[
+ RowBox[
+  RowBox[{
+    RowBox[{"max", "=", 
+      RowBox[{"Max", "[", 
+        RowBox[{
+          RowBox[{"Max", "[", 
+            RowBox[{"Re", "[", "spectrum2Dnr", "]"}], "]"}], ",", 
+          RowBox[{"-", 
+            RowBox[{"Min", "[", 
+              RowBox[{"Re", "[", "spectrum2Dnr", "]"}], "]"}]}]}], "]"}]}], 
+    ";"}], "\[IndentingNewLine]", 
+  RowBox[{
+    RowBox[{"p1", "=", 
+      RowBox[{"ListContourPlot", "[", 
+        RowBox[{
+          RowBox[{"Re", "[", "spectrum2Dnr", "]"}], ",", 
+          RowBox[{"PlotRange", "\[Rule]", 
+            RowBox[{"{", 
+              RowBox[{"0", ",", "max"}], "}"}]}], ",", 
+          RowBox[{"ContourShading", "\[Rule]", "False"}], ",", 
+          RowBox[{"Contours", "\[Rule]", "10"}], ",", 
+          RowBox[{"Ticks", "\[Rule]", "None"}], ",", 
+          RowBox[{"ContourStyle", "\[Rule]", 
+            RowBox[{"{", 
+              RowBox[{"RGBColor", "[", 
+                RowBox[{"0", ",", "0", ",", "1"}], "]"}], "}"}]}], ",", 
+          RowBox[{"DisplayFunction", "\[Rule]", "Identity"}]}], "]"}]}], 
+    ";"}], "\[IndentingNewLine]", 
+  RowBox[{
+    RowBox[{"p2", "=", 
+      RowBox[{"ListContourPlot", "[", 
+        RowBox[{
+          RowBox[{"Re", "[", "spectrum2Dnr", "]"}], ",", 
+          RowBox[{"PlotRange", "\[Rule]", 
+            RowBox[{"{", 
+              RowBox[{
+                RowBox[{"-", "max"}], ",", "0"}], "}"}]}], ",", 
+          RowBox[{"ContourShading", "\[Rule]", "False"}], ",", 
+          RowBox[{"Contours", "\[Rule]", "10"}], ",", 
+          RowBox[{"Ticks", "\[Rule]", "None"}], ",", 
+          RowBox[{"ContourStyle", "\[Rule]", 
+            RowBox[{"{", 
+              RowBox[{"RGBColor", "[", 
+                RowBox[{"1", ",", "0", ",", "0"}], "]"}], "}"}]}], ",", 
+          RowBox[{"DisplayFunction", "\[Rule]", "Identity"}]}], "]"}]}], 
+    ";"}], "\[IndentingNewLine]", 
+  RowBox[{"Show", "[", 
+    RowBox[{
+      RowBox[{"{", 
+        RowBox[{"p1", ",", "p2"}], "}"}], ",", 
+      RowBox[{"PlotRange", "\[Rule]", 
+        RowBox[{"{", 
+          RowBox[{
+            RowBox[{"{", 
+              RowBox[{"1", ",", 
+                RowBox[{"nt", "-", "1"}]}], "}"}], ",", 
+            RowBox[{"{", 
+              RowBox[{"1", ",", 
+                RowBox[{"nt", "-", "1"}]}], "}"}]}], "}"}]}], ",", 
+      RowBox[{"FrameTicks", "\[Rule]", 
+        RowBox[{"{", 
+          RowBox[{"None", ",", "None"}], "}"}]}], ",", 
+      RowBox[{"DisplayFunction", "\[Rule]", "$DisplayFunction"}]}], 
+    "]"}]]], "Input"],
+
+Cell[BoxData[
+ RowBox[
+  RowBox[{
+    RowBox[{"max", "=", 
+      RowBox[{"Max", "[", 
+        RowBox[{
+          RowBox[{"Max", "[", 
+            RowBox[{"Re", "[", "spectrum2Dabs", "]"}], "]"}], ",", 
+          RowBox[{"-", 
+            RowBox[{"Min", "[", 
+              RowBox[{"Re", "[", "spectrum2Dabs", "]"}], "]"}]}]}], "]"}]}], 
+    ";"}], "\[IndentingNewLine]", 
+  RowBox[{
+    RowBox[{"p1", "=", 
+      RowBox[{"ListContourPlot", "[", 
+        RowBox[{
+          RowBox[{"Re", "[", "spectrum2Dabs", "]"}], ",", 
+          RowBox[{"PlotRange", "\[Rule]", 
+            RowBox[{"{", 
+              RowBox[{"0", ",", "max"}], "}"}]}], ",", 
+          RowBox[{"ContourShading", "\[Rule]", "False"}], ",", 
+          RowBox[{"Contours", "\[Rule]", "10"}], ",", 
+          RowBox[{"Ticks", "\[Rule]", "None"}], ",", 
+          RowBox[{"ContourStyle", "\[Rule]", 
+            RowBox[{"{", 
+              RowBox[{"RGBColor", "[", 
+                RowBox[{"0", ",", "0", ",", "1"}], "]"}], "}"}]}], ",", 
+          RowBox[{"DisplayFunction", "\[Rule]", "Identity"}]}], "]"}]}], 
+    ";"}], "\[IndentingNewLine]", 
+  RowBox[{
+    RowBox[{"p2", "=", 
+      RowBox[{"ListContourPlot", "[", 
+        RowBox[{
+          RowBox[{"Re", "[", "spectrum2Dabs", "]"}], ",", 
+          RowBox[{"PlotRange", "\[Rule]", 
+            RowBox[{"{", 
+              RowBox[{
+                RowBox[{"-", "max"}], ",", "0"}], "}"}]}], ",", 
+          RowBox[{"ContourShading", "\[Rule]", "False"}], ",", 
+          RowBox[{"Contours", "\[Rule]", "10"}], ",", 
+          RowBox[{"Ticks", "\[Rule]", "None"}], ",", 
+          RowBox[{"ContourStyle", "\[Rule]", 
+            RowBox[{"{", 
+              RowBox[{"RGBColor", "[", 
+                RowBox[{"1", ",", "0", ",", "0"}], "]"}], "}"}]}], ",", 
+          RowBox[{"DisplayFunction", "\[Rule]", "Identity"}]}], "]"}]}], 
+    ";"}], "\[IndentingNewLine]", 
+  RowBox[{"Show", "[", 
+    RowBox[{
+      RowBox[{"{", 
+        RowBox[{"p1", ",", "p2"}], "}"}], ",", 
+      RowBox[{"PlotRange", "\[Rule]", 
+        RowBox[{"{", 
+          RowBox[{
+            RowBox[{"{", 
+              RowBox[{"1", ",", 
+                RowBox[{"nt", "-", "1"}]}], "}"}], ",", 
+            RowBox[{"{", 
+              RowBox[{"1", ",", 
+                RowBox[{"nt", "-", "1"}]}], "}"}]}], "}"}]}], ",", 
+      RowBox[{"FrameTicks", "\[Rule]", 
+        RowBox[{"{", 
+          RowBox[{"None", ",", "None"}], "}"}]}], ",", 
+      RowBox[{"DisplayFunction", "\[Rule]", "$DisplayFunction"}]}], 
+    "]"}]]], "Input"]
+}, Open  ]]
+},
+WindowSize->{1280, 709},
+WindowMargins->{{0, Automatic}, {Automatic, 0}},
+PrintingCopies->1,
+PrintingPageRange->{Automatic, Automatic},
+PrintingOptions->{"PrintCellBrackets"->False,
+"PrintMultipleHorizontalPages"->False,
+"PrintRegistrationMarks"->True,
+"PrintingMargins"->{{36, 36}, {36, 36}}},
+FrontEndVersion->"8.0 for Mac OS X x86 (32-bit, 64-bit Kernel) (November 6, \
+2010)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[557, 20, 105, 3, 89, "Section"],
+Cell[CellGroupData[{
+Cell[687, 27, 72, 0, 26, "Subsubtitle"],
+Cell[762, 29, 127, 3, 26, "Text"],
+Cell[892, 34, 1292, 42, 43, "Input"],
+Cell[2187, 78, 58, 0, 26, "Text"],
+Cell[2248, 80, 457, 15, 30, "Input"],
+Cell[2708, 97, 160, 3, 26, "Text"],
+Cell[2871, 102, 248, 7, 58, "Input"],
+Cell[3122, 111, 195, 4, 26, "Text"],
+Cell[3320, 117, 2104, 70, 118, "Input"],
+Cell[5427, 189, 37, 0, 26, "Text"],
+Cell[5467, 191, 922, 21, 32, "Input"],
+Cell[6392, 214, 145, 3, 26, "Text"],
+Cell[6540, 219, 1228, 35, 118, "Input"],
+Cell[7771, 256, 2516, 64, 32, "Input"],
+Cell[10290, 322, 2520, 64, 32, "Input"],
+Cell[12813, 388, 2524, 64, 32, "Input"]
+}, Open  ]]
+}
+]
+*)
+
+(* End of internal cache information *)
+
